@@ -4,7 +4,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     return LaunchDescription([
         Node(
-            package='vision',
+            package='limcheck',
             namespace='stigemaskine_1',
             executable='limcheck',
             name='limcheck_1'
