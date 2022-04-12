@@ -7,9 +7,18 @@
 # 1. Introduction
 The colcon package for which the dolle-iot software is build uppon. 
 ROS2 Foxy is at the moment the framework uppon the solution is made.
-
+## Installation <!-- omit in toc -->
+To install the package we use snap along with github. 
+First we download the package.
+```bash
+git clone https://github.com/pbtorrild/dolle-iot.git
+```
+Then we install the provided snap.
+```bash
+cd dolle-iot && snap install dolle-iot_0.1_arm64.snap --devmode
+```
 # 2. Overview of Functionallities
-Bellow is the implemented functionalities provided
+Bellow is the implemented functionalities provided. To install the dolle-iot package use snap. 
 
 ## 2.1. Limcheck 
 How do we make sure that each step on the ladder is glued in place? 
