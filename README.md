@@ -17,7 +17,7 @@ We use computer vision and big data to provide the opporator with realtime infor
 
 ### 2.1.1. Executionables
 
-- dolle-iot.limcheck
+- dolle-iot.limcheck | *Boots camera and begin gluedetection*
 
 
 
