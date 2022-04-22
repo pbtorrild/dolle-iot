@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 project(limcheck)
 
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
@@ -17,17 +21,22 @@ endif()
 
 include_directories(include)
 link_directories(include)
+
+find_package(BLAS REQUIRED)
 find_package(rcpputils REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rcl_interfaces REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
-find_package(v4l2_camera REQUIRED)
 find_package(image_transport REQUIRED)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Charts)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts)
 
 ament_export_dependencies(
   sensor_msgs
+  Qt${QT_VERSION_MAJOR}
+  BLAS
 )
 
 add_executable(talker src/basic_publisher.cpp)
@@ -37,17 +46,30 @@ add_executable(listener src/basic_subscriber.cpp)
 ament_target_dependencies(listener rclcpp std_msgs)
 
 add_executable(limcheck src/limcheck.cpp)
-ament_target_dependencies(limcheck rclcpp std_msgs OpenCV image_transport cv_bridge )
+ament_target_dependencies(limcheck rclcpp std_msgs image_transport cv_bridge BLAS)
 
 add_executable(camera src/camera.cpp)
-ament_target_dependencies(camera rclcpp std_msgs OpenCV sensor_msgs )
+ament_target_dependencies(camera rclcpp std_msgs sensor_msgs cv_bridge)
 
-#install executionables here
+# Gui install
+set(GUI_SOURCES
+        src/gui/main.cpp
+        src/gui/qml.qrc
+)
+
+
+add_executable(gui ${GUI_SOURCES})
+target_link_libraries(gui
+  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Charts)
+
+
+#install executables here
 install(TARGETS
   talker
   listener
   limcheck
   camera
+  gui
   DESTINATION lib/${PROJECT_NAME})
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

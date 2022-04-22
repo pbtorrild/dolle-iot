@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Content.qml</file>
+        <file>Header.qml</file>
+        <file>Footer.qml</file>
+        <file>PieCharts.qml</file>
+        <file>GlueTimer.qml</file>
+        <file>include/timer.js</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file alias="bold">fonts/DINNextLTPro-Bold.ttf</file>
+        <file alias="heavy">fonts/DINNextLTPro-Heavy.ttf</file>
+        <file alias="light">fonts/DINNextLTPro-Light.ttf</file>
+        <file alias="medium">fonts/DINNextLTPro-Medium.ttf</file>
+        <file alias="regular">fonts/DINNextLTPro-Regular.ttf</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="logo.png">images/logo.png</file>
+        <file alias="logo.svg">images/logo.svg</file>
+        <file alias="favicon.png">images/favicon.ico</file>
+    </qresource>
+</RCC>
