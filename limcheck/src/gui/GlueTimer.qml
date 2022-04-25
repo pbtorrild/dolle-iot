@@ -2,9 +2,12 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import "include/timer.js" as Countdown
+import "include/DolleBranding.js" as Dolle
 ColumnLayout{
     id:glue_timer
-    anchors.fill: parent
+    anchors.fill: timer_area
+    height: timer_area.height
+    width: timer_area.width
     FontLoader{
         id: dolle_font
         source: "fonts/regular"
@@ -17,7 +20,7 @@ ColumnLayout{
 
     Text{
         id:time
-        height: control.width/3
+        height: glue_timer.height/2
         width: glue_timer.width
         Layout.alignment: Qt.AlignCenter
         font.family: dolle_font.name
@@ -30,6 +33,7 @@ ColumnLayout{
         id:control
         Layout.alignment: Qt.AlignCenter
         width: glue_timer.width
+        height:glue_timer.height/2
         text: qsTr("KVITTER FOR RENGØRING")
         contentItem:Text{
             text: control.text
@@ -44,8 +48,8 @@ ColumnLayout{
             font.pixelSize: 72 
         }
         background: Rectangle {
-                implicitWidth: control.width
-                implicitHeight: control.width/3
+                implicitWidth: glue_timer.width
+                implicitHeight: glue_timer.height/2
                 color: "#d7102d"
                 radius: 15
 

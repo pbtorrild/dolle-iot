@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
-
+import "include/DolleBranding.js" as Dolle
 ApplicationWindow {
     id: window
     width: 1280
@@ -18,25 +18,26 @@ ApplicationWindow {
         spacing: 5
         Header{
             id:header
-            Layout.leftMargin: 85
-            Layout.rightMargin: 85
-            Layout.topMargin: 85
-            Layout.preferredHeight: 85
+            Layout.leftMargin: Dolle.logo.height
+            Layout.rightMargin: Dolle.logo.height
+            Layout.topMargin: Dolle.logo.height
+            Layout.preferredHeight: Dolle.logo.height
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
         }
         Content{
             id: content
-            Layout.leftMargin: 85
-            Layout.rightMargin:85
+            Layout.leftMargin: Dolle.logo.height
+            Layout.rightMargin:Dolle.logo.height
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.maximumHeight: window.height-header.height-footer.height
+            Layout.alignment: Qt.AlignLeft
 
         }
         Footer{
             id:footer
-            Layout.rightMargin: 85
+            Layout.rightMargin: Dolle.logo.height
             Layout.fillWidth: true
             Layout.preferredHeight:9
             Layout.alignment: Qt.AlignBottom

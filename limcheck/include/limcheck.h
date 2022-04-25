@@ -1,7 +1,7 @@
 #ifndef LIMCHECK_H
 #define LIMCHECK_H
 
-#include <opencv4/opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 #include <boost/atomic.hpp>
 #include <terminal-msgs.h>
 #include <stdlib.h>
@@ -47,7 +47,7 @@ namespace dolle_iot
     class limcheck
     {
     private:
-        bool enable_preview=false; 
+        bool enable_preview=true; 
         vision::centre img_centre; 
         //object detection
         cv::Ptr<cv::BackgroundSubtractorKNN> object_detector_;
@@ -64,25 +64,25 @@ namespace dolle_iot
                 img_centre=vision::get_centre(src);
             }
             find_planks(src);
-            /*
+            
             if(!plank_locations.empty()){
-                if(plank_locations.begin()->id%30==0){                    
-                    cv::imwrite("/home/petert/dev_ws/src/dolle-iot/vision/data/"+std::to_string(plank_locations.begin()->id)+"_"+std::to_string(id_location_count)+".jpg",cv::Mat(src,plank_locations.begin()->pos));
+                if(plank_locations.begin()->id%20==0){                    
+                    cv::imwrite("/home/petert/dev_ws/src/dolle-iot/limcheck/data/raw/"+std::to_string(plank_locations.begin()->id)+"_"+std::to_string(id_location_count)+".jpg",cv::Mat(src,plank_locations.begin()->pos));
                     cv::waitKey(5);
                     id_location_count++;
-                }
-                else{id_location_count =0;}
+                }               
                 
-                
-            }*/
+            }
+            else{id_location_count =0;}
             //mark newest object
             for(vision::object plank : plank_locations){
-                cv::rectangle(src,plank.pos,{255,0,0},1);
+                if(enable_preview){
+                    cv::imshow("Vision alg",src(plank.pos));
+                    cv::waitKey(1);
+                }
+                cv::rectangle(src,plank.pos,{255,0,0},2);
             }
-            if(enable_preview){
-                cv::imshow("Vision alg",src);
-                cv::waitKey(1);
-            }
+            
             return src;
         }
 
@@ -108,8 +108,8 @@ namespace dolle_iot
             {   
                 cv::Rect rect_ = cv::boundingRect(contour);
                 
-                if(rect_.width<200){continue;}
-                if(rect_.height<100){continue;}
+                if(rect_.width<150){continue;}
+                if(rect_.height<50){continue;}
                 if(rect_.y>340){continue;}
                 if(rect_.x<20){continue;}
                 //Check if the object is new:
@@ -120,6 +120,16 @@ namespace dolle_iot
                 plank_locations.push_back(vision::object(id_count,rect_));
                 vision::object(id_count,rect_).get_info();
             }
+
+        }
+
+        void find_dowels(cv::Mat src){
+            /*################## FILTER ##################*/
+                /*  PLANK CARACTERISTICS 
+                    * dowels are circular
+
+                */
+
 
         }
         

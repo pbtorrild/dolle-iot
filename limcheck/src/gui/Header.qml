@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.12
+import "include/DolleBranding.js" as Dolle
 
 RowLayout {
     id:header
@@ -37,13 +38,13 @@ RowLayout {
             anchors.bottom: header_text.bottom
             anchors.bottomMargin: header_text.height*0.05
 
-            color: "#d7102d"
+            color: Dolle.colors.red
         }
     }
     Image {
         id: logo
-        Layout.preferredWidth: 220
-        Layout.preferredHeight: 85
-        source: "images/logo.svg"
+        Layout.preferredWidth: Dolle.logo.width
+        Layout.preferredHeight: Dolle.logo.height
+        source: Dolle.logo.source
     }
 }

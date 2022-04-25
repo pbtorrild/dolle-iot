@@ -39,12 +39,6 @@ ament_export_dependencies(
   BLAS
 )
 
-add_executable(talker src/basic_publisher.cpp)
-ament_target_dependencies(talker rclcpp std_msgs)
-
-add_executable(listener src/basic_subscriber.cpp)
-ament_target_dependencies(listener rclcpp std_msgs)
-
 add_executable(limcheck src/limcheck.cpp)
 ament_target_dependencies(limcheck rclcpp std_msgs image_transport cv_bridge BLAS)
 
@@ -65,8 +59,6 @@ target_link_libraries(gui
 
 #install executables here
 install(TARGETS
-  talker
-  listener
   limcheck
   camera
   gui

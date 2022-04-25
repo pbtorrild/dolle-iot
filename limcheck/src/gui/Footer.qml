@@ -1,5 +1,5 @@
 import QtQuick 2.0
-
+import "include/DolleBranding.js" as Dolle
 Rectangle {
     id: footer
     Rectangle{
@@ -7,6 +7,6 @@ Rectangle {
         anchors.bottom: parent.BottomLeft
         width: footer.width
         height: 9
-        color: "#d7102d"
+        color: Dolle.colors.red
     }
 }

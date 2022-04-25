@@ -7,6 +7,7 @@
         <file>PieCharts.qml</file>
         <file>GlueTimer.qml</file>
         <file>include/timer.js</file>
+        <file>include/DolleBranding.js</file>
     </qresource>
     <qresource prefix="/fonts">
         <file alias="bold">fonts/DINNextLTPro-Bold.ttf</file>
