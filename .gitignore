@@ -1,0 +1,3 @@
+#IGNORE DATA
+**/data/raw/*
+.vscode

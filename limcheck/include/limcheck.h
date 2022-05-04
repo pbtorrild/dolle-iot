@@ -47,7 +47,7 @@ namespace dolle_iot
     class limcheck
     {
     private:
-        bool enable_preview=true; 
+        bool enable_preview=false; 
         vision::centre img_centre; 
         //object detection
         cv::Ptr<cv::BackgroundSubtractorKNN> object_detector_;
@@ -66,21 +66,21 @@ namespace dolle_iot
             find_planks(src);
             
             if(!plank_locations.empty()){
-                if(plank_locations.begin()->id%20==0){                    
+                /*if(plank_locations.begin()->id%50==0){                    
                     cv::imwrite("/home/petert/dev_ws/src/dolle-iot/limcheck/data/raw/"+std::to_string(plank_locations.begin()->id)+"_"+std::to_string(id_location_count)+".jpg",cv::Mat(src,plank_locations.begin()->pos));
-                    cv::waitKey(5);
+                    cv::waitKey(1);
                     id_location_count++;
-                }               
+                } */              
                 
             }
             else{id_location_count =0;}
             //mark newest object
             for(vision::object plank : plank_locations){
-                if(enable_preview){
-                    cv::imshow("Vision alg",src(plank.pos));
-                    cv::waitKey(1);
-                }
-                cv::rectangle(src,plank.pos,{255,0,0},2);
+                
+                std::vector<std::vector<cv::Point>> glue_locations = find_glue(src(plank.pos));
+                cv::Scalar color = glue_locations.empty() ? cv::Scalar(255,0,0) : cv::Scalar(0,255,0);
+                cv::rectangle(src,plank.pos,color,2);
+                cv::putText(src,"ID: "+std::to_string(plank.id),cv::Point(plank.pos.x,plank.pos.y),cv::FONT_HERSHEY_DUPLEX,1,color,2,false);
             }
             
             return src;
@@ -123,17 +123,19 @@ namespace dolle_iot
 
         }
 
-        void find_dowels(cv::Mat src){
-            /*################## FILTER ##################*/
-                /*  PLANK CARACTERISTICS 
-                    * dowels are circular
-
-                */
-
-
+        std::vector<std::vector<cv::Point>> find_glue(cv::Mat src){
+            cv::cvtColor(src,src,cv::COLOR_BGR2GRAY);
+            cv::threshold(src,src,230,255,0); //Remove non white elements
+            std::vector<std::vector<cv::Point>> contours;
+            std::vector<cv::Vec4i> hierarchy;
+            cv::threshold(src,src,254,255,0);
+            cv::findContours(src,contours, hierarchy,cv::RETR_TREE,cv::CHAIN_APPROX_SIMPLE);
+            if(enable_preview){
+                cv::imshow("Vision alg",src);
+                cv::waitKey(1);
+            }
+            return contours;
         }
-        
-        
 
         limcheck(){
             std::cout << "id;c.x;c.y;width;height" << std::endl;

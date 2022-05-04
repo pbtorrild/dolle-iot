@@ -46,5 +46,18 @@ RowLayout {
         Layout.preferredWidth: Dolle.logo.width
         Layout.preferredHeight: Dolle.logo.height
         source: Dolle.logo.source
+        signal pressAndHold()
+
+        Timer {
+            id: longPressTimer
+
+            interval: 2000 //your press-and-hold interval here
+            repeat: false
+            running: false
+
+            onTriggered: {
+                button.pressAndHold()
+            }
+        }
     }
 }
