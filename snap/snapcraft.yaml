@@ -53,7 +53,7 @@ parts:
       - libqtest-ocaml-dev
       - libqtspell-qt5-dev
     stage-packages:  
-      - ros-foxy-ros2run]
+      - ros-foxy-ros2run
       - libdouble-conversion3
       - libpcre2-16-0
       - libqt5core5a
