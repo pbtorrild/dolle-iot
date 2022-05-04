@@ -52,7 +52,15 @@ parts:
       - libqtermwidget5-0-dev
       - libqtest-ocaml-dev
       - libqtspell-qt5-dev
-    stage-packages:  [ros-foxy-ros2run]
+    stage-packages:  
+      - ros-foxy-ros2run]
+      - libdouble-conversion3
+      - libpcre2-16-0
+      - libqt5core5a
+      - libqt5gui5
+      - libqt5network5
+      - libqt5qml5
+      - libqt5widgets5
 
 apps:
   gui:
