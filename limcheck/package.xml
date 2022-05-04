@@ -18,10 +18,6 @@
   <depend>cv_bridge</depend>
   <depend>image_transport</depend>
   <depend>libblas-dev</depend>
-  <depend>qt5-default</depend>
-  <depend>libqt5quick5</depend>
-  <depend>libqt5quickcontrols2-5</depend>
-  <depend>libqt5charts5-dev</depend>  
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

@@ -14,7 +14,7 @@ parts:
     plugin: colcon
     source: https://github.com/pbtorrild/dolle-iot.git
     source-subdir: limcheck
-    build-packages: [make, gcc, g++,libblas-dev]
+    build-packages: [make, gcc, g++,libblas-dev,*qt5*-dev ]
     stage-packages:  [ros-foxy-ros2run]
 
 apps:
