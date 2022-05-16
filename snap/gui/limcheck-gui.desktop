@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Limcheck Gui
+Exec=dolle-iot.limcheck-gui
+Icon=${SNAP}/meta/gui/dolle-iot.png

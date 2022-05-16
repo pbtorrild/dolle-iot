@@ -4,12 +4,56 @@ version: '0.1' # just for humans, typically '1.2+git' or '1.3.2'
 summary: IoT implementation at Dolle A/S # 79 char long summary
 description: |
   For more information see README.md
+icon: ./limcheck/src/gui/images/favicon.png
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
 
-grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+apps:
+  limcheck-gui:
+    command: bin/desktop-launch $SNAP/opt/ros/snap/lib/limcheck/gui   
+    common-id: limcheck-gui.desktop
+    plugs:
+      - desktop-launch
+      - home
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - wayland
+      - x11
+      - network
+      - network-bind 
+      - camera
+      - locale-control
+    extensions: 
+      - ros2-foxy
 
 parts:
-  
+  desktop-qt5:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: qt
+    plugin: make
+    make-parameters: ["FLAVOR=qt5"]
+    build-packages:
+      - build-essential
+      - qtbase5-dev
+      - dpkg-dev
+    stage-packages:
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libqt5gui5
+      - libgdk-pixbuf2.0-0
+      - libqt5svg5 # for loading icon themes which are svg
+      - try: [appmenu-qt5] # not available on core18
+      - locales-all
+      - xdg-user-dirs
+      - fcitx-frontend-qt5
+
   limcheck:
     plugin: colcon
     source: https://github.com/pbtorrild/dolle-iot.git
@@ -52,6 +96,22 @@ parts:
       - libqtermwidget5-0-dev
       - libqtest-ocaml-dev
       - libqtspell-qt5-dev
+      - qml-module-qtquick-controls2
+      - qml-module-qtquick-controls
+      - qml-module-qtquick-dialogs
+      - qml-module-qtquick-extras
+      - qml-module-qtquick-layouts
+      - qml-module-qtquick-localstorage
+      - qml-module-qtquick-particles2
+      - qml-module-qtquick-privatewidgets
+      - qml-module-qtquick-scene2d
+      - qml-module-qtquick-scene3d
+      - qml-module-qtquick-shapes
+      - qml-module-qtquick-templates2
+      - qml-module-qtquick-virtualkeyboard
+      - qml-module-qtquick-window2
+      - qml-module-qtquick-xmllistmodel
+      - qml-module-qtquick2
     stage-packages:  
       - ros-foxy-ros2run
       - libdouble-conversion3
@@ -61,9 +121,21 @@ parts:
       - libqt5network5
       - libqt5qml5
       - libqt5widgets5
-
-apps:
-  gui:
-    command: opt/ros/foxy/bin/ros2 run limcheck gui
-    plugs: [network, network-bind, camera, account-control, home]
-    extensions: [ros2-foxy]
+      - libgio2.0-cil-dev
+      - libgio3.0-cil-dev
+      - qml-module-qtquick-controls2
+      - qml-module-qtquick-controls
+      - qml-module-qtquick-dialogs
+      - qml-module-qtquick-extras
+      - qml-module-qtquick-layouts
+      - qml-module-qtquick-localstorage
+      - qml-module-qtquick-particles2
+      - qml-module-qtquick-privatewidgets
+      - qml-module-qtquick-scene2d
+      - qml-module-qtquick-scene3d
+      - qml-module-qtquick-shapes
+      - qml-module-qtquick-templates2
+      - qml-module-qtquick-virtualkeyboard
+      - qml-module-qtquick-window2
+      - qml-module-qtquick-xmllistmodel
+      - qml-module-qtquick2
