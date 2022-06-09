@@ -2,16 +2,50 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <signal.h>
 
-#include <rclcpp/rclcpp.hpp>
+#include <limcheck.h>
+#include <terminal-msgs.h>
 
-#include <recording.h>
+bool running =true;
+void sigint_callback(int){
+  running =false;
+}
 
-int main(int argc, char * argv[])
+
+int main()
 {
+  bool preview =true;
+  signal(SIGINT,sigint_callback);
   int cam_id=0;
 
-  rclcpp::init(argc, argv);  
-  rclcpp::spin(std::make_shared<dolle_iot::vision::record>(cam_id));
-  rclcpp::shutdown();
+  cv::VideoCapture cap(cam_id);
+  cv::waitKey(200);
+  if(!cap.isOpened()){
+    terminal_msgs::error("Coud not open camera");
+    return -1;
+  } 
+  dolle_iot::limcheck limcheck;
+  while (running)
+  {
+    cv::Mat frame;
+    cap >> frame;
+
+    if(frame.empty()){
+      break;
+    } 
+    cv::Mat vision= limcheck.apply(frame.clone());
+    if(preview){
+      cv::imshow("Preview",vision);
+      char c = (char)cv::waitKey(1);
+      if(c=='v'){
+        cv::destroyAllWindows();
+        preview=false;
+      } 
+    }  
+  }
+  cap.release();
+
+  return 0;
+
 }

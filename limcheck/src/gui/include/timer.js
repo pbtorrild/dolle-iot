@@ -11,7 +11,6 @@ function resetTimer(){
     timer_color = "#5C5851";
     timer_output = getTime();
     tick--;
-    console.log(Date().toString())
 }
 function regular(){
     let min =Math.floor(tick/60).toString();;

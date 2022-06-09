@@ -26,6 +26,7 @@ find_package(BLAS REQUIRED)
 find_package(rcpputils REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rcl_interfaces REQUIRED)
+find_package(rosidl_generator_c REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
@@ -46,15 +47,21 @@ add_executable(camera src/camera.cpp)
 ament_target_dependencies(camera rclcpp std_msgs sensor_msgs cv_bridge)
 
 # Gui install
+include_directories(src/gui/include)
+link_directories(src/gui/include)
+
 set(GUI_SOURCES
         src/gui/main.cpp
         src/gui/qml.qrc
+        
 )
 
 
 add_executable(gui ${GUI_SOURCES})
+
 target_link_libraries(gui
-  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Charts)
+  
+  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Charts ${rclcpp_LIBRARIES} ${std_msgs_LIBRARIES} )
 
 
 #install executables here

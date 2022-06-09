@@ -55,8 +55,11 @@ ColumnLayout{
 
         }
         hoverEnabled: false
-        onPressed: {background.color="#941017"; Countdown.resetTimer();}
-        onReleased: {background.color="#d7102d";}
+        onPressed: {
+            background.color="#941017"; 
+            Countdown.resetTimer();
+            background.color="#d7102d";
+            }
     }
 }
     

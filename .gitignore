@@ -1,5 +1,6 @@
 #IGNORE DATA
 **/data/raw/*
 .vscode
+.git
 
 **/*.snap
