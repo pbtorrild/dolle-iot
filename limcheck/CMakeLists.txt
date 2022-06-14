@@ -4,7 +4,11 @@ project(limcheck)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
+if(CMAKE_VERSION VERSION_LESS "3.10")
+  cmake_policy(SET CMP0071 OLD)
+else()
+  cmake_policy(SET CMP0071 NEW)
+endif()
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
@@ -31,17 +35,33 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
+
+find_package(qml_ros2_plugin REQUIRED)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Charts)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts)
 
+find_package(rosidl_default_generators REQUIRED)
+
+set(msg_files
+  "msg/CleaningStamp.msg"
+)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  ${msg_files}
+  DEPENDENCIES std_msgs
+)
+set_property(SOURCE ${msg_files} PROPERTY SKIP_AUTOGEN ON)
+
 ament_export_dependencies(
+  rosidl_default_runtime
+  std_msgs
   sensor_msgs
   Qt${QT_VERSION_MAJOR}
   BLAS
 )
 
-add_executable(limcheck src/limcheck.cpp)
-ament_target_dependencies(limcheck rclcpp std_msgs image_transport cv_bridge BLAS)
+add_executable(limchecker src/limcheck.cpp)
+ament_target_dependencies(limchecker rclcpp std_msgs image_transport cv_bridge BLAS)
 
 add_executable(camera src/camera.cpp)
 ament_target_dependencies(camera rclcpp std_msgs sensor_msgs cv_bridge)
@@ -56,20 +76,27 @@ set(GUI_SOURCES
         
 )
 
-
 add_executable(gui ${GUI_SOURCES})
 
 target_link_libraries(gui
   
-  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Charts ${rclcpp_LIBRARIES} ${std_msgs_LIBRARIES} )
-
+  PRIVATE
+  Qt${QT_VERSION_MAJOR}::Core 
+  Qt${QT_VERSION_MAJOR}::Quick 
+  Qt${QT_VERSION_MAJOR}::Charts 
+  ${rclcpp_LIBRARIES} 
+  ${std_msgs_LIBRARIES}
+  ${qml_ros2_plugin_LIBRARIES}
+  
+)
 
 #install executables here
 install(TARGETS
-  limcheck
+  limchecker
   camera
   gui
   DESTINATION lib/${PROJECT_NAME})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights

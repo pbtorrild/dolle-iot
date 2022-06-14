@@ -3,12 +3,12 @@
 .pragma library
 //TimerFunctions
 var tick= 20*60;
-var timer_color="#5C5851";
+var timer_color="#000000";
 var timer_output= "20:00";
 
 function resetTimer(){
     tick=20*60;
-    timer_color = "#5C5851";
+    timer_color = "#000000";
     timer_output = getTime();
     tick--;
 }

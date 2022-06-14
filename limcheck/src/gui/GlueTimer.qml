@@ -50,15 +50,15 @@ ColumnLayout{
         background: Rectangle {
                 implicitWidth: glue_timer.width
                 implicitHeight: glue_timer.height/2
-                color: "#d7102d"
+                color: Dolle.colors.red
                 radius: 15
 
         }
         hoverEnabled: false
-        onPressed: {
-            background.color="#941017"; 
-            Countdown.resetTimer();
-            background.color="#d7102d";
+        onClicked: {
+            background.color=Dolle.colors.dark_red,
+            Countdown.resetTimer(),
+            background.color=Dolle.colors.red 
             }
     }
 }

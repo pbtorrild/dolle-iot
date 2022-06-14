@@ -68,7 +68,6 @@ namespace dolle_iot
             if(!plank_locations.empty()){
                 if(plank_locations.begin()->id%25==0){                    
                     cv::imwrite("/home/petert/dev_ws/src/dolle-iot/limcheck/data/raw/"+std::to_string(plank_locations.begin()->id)+"_"+std::to_string(id_location_count)+".jpg",cv::Mat(src,plank_locations.begin()->pos));
-                    cv::waitKey(1);
                     id_location_count++;
                 }              
                 
@@ -87,18 +86,18 @@ namespace dolle_iot
         //Abstraction of data from image to rectangles
         void find_planks(cv::Mat src){
             /*################## FILTER ##################*/
-                /*  PLANK CARACTERISTICS 
+                /*  PLANK CHARACTERISTICS 
                     * Planks are are larger than 200x100 px
                     * Have origen below 340 y (upper part of img)
-                    * Skip the first position, so more right than 20x
-                    * New objects are always comming from the left side
+                    * Skip the first position,skip images that are on the left, so more right or left than 5px from the image boarder
+                    * New objects are always coming from the left side
                     * There can max be 2 objects on an image
                 */ 
             
             object_detector_->apply(src,src);
             std::vector<std::vector<cv::Point>> contours;
             std::vector<cv::Vec4i> hierarchy;
-            cv::threshold(src,src,254,255,0); //Remove shaddows
+            cv::threshold(src,src,254,255,0); //Remove shadows
             cv::findContours(src,contours, hierarchy,cv::RETR_TREE,cv::CHAIN_APPROX_SIMPLE);
             plank_locations.clear();
 
@@ -109,7 +108,7 @@ namespace dolle_iot
                 if(rect_.width<200){continue;}
                 if(rect_.height<100){continue;}
                 if(rect_.y>340){continue;}
-                if(rect_.x<5|| rect_.x>src.cols-5){continue;}
+                if(rect_.x<5 || (rect_.x+rect_.width)>(src.cols-5)){continue;}
                 //Check if the object is new:
                 if(rect_.x<latest_x){
                     id_count++;
@@ -136,7 +135,6 @@ namespace dolle_iot
         }
 
         limcheck(){
-            std::cout << "id;c.x;c.y;width;height" << std::endl;
             object_detector_=cv::createBackgroundSubtractorKNN();
             if(enable_preview){
                 cv::namedWindow("Vision alg");

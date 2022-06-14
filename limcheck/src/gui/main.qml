@@ -2,6 +2,8 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import "include/DolleBranding.js" as Dolle
+import Ros2 1.0
+
 ApplicationWindow {
     id: window
     width: 1280
@@ -11,7 +13,12 @@ ApplicationWindow {
     title: qsTr("Limcheck")
     
     color: "#ffffff"
-       
+    Connections {
+        target: Ros2
+        onShutdown: Qt.quit()
+    }
+    // Arguments are: Topic, Message Type, Queue Size
+    property var timePublisher: Ros2.createPublisher("/stigemaskine1/gui/limkontrol", "limcheck/msg/CleaningStamp", 10)
 
     ColumnLayout{
         anchors.fill: parent
@@ -45,4 +52,10 @@ ApplicationWindow {
 
 
     }
+    Component.onCompleted: {
+        // Initialize ROS with the given name. The command line args are passed by the plugin
+        // Optionally, you can call init with a string list ["arg1", "arg2"] after the name to use those
+        // args instead of the ones supplied by the command line.
+        Ros2.init("stigemaskine1_gui")
+    } 
 }
