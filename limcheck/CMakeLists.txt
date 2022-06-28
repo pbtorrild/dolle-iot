@@ -26,6 +26,8 @@ endif()
 include_directories(include)
 link_directories(include)
 
+find_library(WiringPi REQUIRED)
+
 find_package(BLAS REQUIRED)
 find_package(rcpputils REQUIRED)
 find_package(rclcpp REQUIRED)

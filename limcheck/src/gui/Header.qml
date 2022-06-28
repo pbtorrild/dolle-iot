@@ -50,8 +50,8 @@ RowLayout {
         MouseArea {
             anchors.fill: parent
             
-            onPressAndHold: {window.visibility="Windowed"}
-            onDoubleClicked: {window.visibility="FullScreen"}
+            onPressAndHold: {main.visibility="Windowed"}
+            onDoubleClicked: {main.visibility="FullScreen"}
         }
 
     }
