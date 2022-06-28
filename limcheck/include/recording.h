@@ -60,7 +60,7 @@ namespace dolle_iot{
 
                 record(uint8_t camera_id=0) : Node("camera_"+camera_id), count_(0)
                 {
-                    publisher_ = this->create_publisher<sensor_msgs::msg::Image>("stigemaskine1/camera_"+std::to_string(camera_id)+"/image_raw", 10);
+                    publisher_ = this->create_publisher<sensor_msgs::msg::Image>("stigemaskine2/camera_"+std::to_string(camera_id)+"/image_raw", 10);
                     camera_id_ =camera_id;
                     //Open specified camera
                     video_stream.open(camera_id_);

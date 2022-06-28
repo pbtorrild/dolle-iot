@@ -66,19 +66,16 @@ namespace dolle_iot
             find_planks(src);
             
             if(!plank_locations.empty()){
-                /*if(plank_locations.begin()->id%50==0){                    
+                if(plank_locations.begin()->id%25==0){                    
                     cv::imwrite("/home/petert/dev_ws/src/dolle-iot/limcheck/data/raw/"+std::to_string(plank_locations.begin()->id)+"_"+std::to_string(id_location_count)+".jpg",cv::Mat(src,plank_locations.begin()->pos));
-                    cv::waitKey(1);
                     id_location_count++;
-                } */              
+                }              
                 
             }
             else{id_location_count =0;}
             //mark newest object
             for(vision::object plank : plank_locations){
-                
-                std::vector<std::vector<cv::Point>> glue_locations = find_glue(src(plank.pos));
-                cv::Scalar color = glue_locations.empty() ? cv::Scalar(255,0,0) : cv::Scalar(0,255,0);
+                cv::Scalar color = cv::Scalar(255,0,0);
                 cv::rectangle(src,plank.pos,color,2);
                 cv::putText(src,"ID: "+std::to_string(plank.id),cv::Point(plank.pos.x,plank.pos.y),cv::FONT_HERSHEY_DUPLEX,1,color,2,false);
             }
@@ -89,18 +86,18 @@ namespace dolle_iot
         //Abstraction of data from image to rectangles
         void find_planks(cv::Mat src){
             /*################## FILTER ##################*/
-                /*  PLANK CARACTERISTICS 
+                /*  PLANK CHARACTERISTICS 
                     * Planks are are larger than 200x100 px
                     * Have origen below 340 y (upper part of img)
-                    * Skip the first position, so more right than 20x
-                    * New objects are always comming from the left side
+                    * Skip the first position,skip images that are on the left, so more right or left than 5px from the image boarder
+                    * New objects are always coming from the left side
                     * There can max be 2 objects on an image
                 */ 
             
             object_detector_->apply(src,src);
             std::vector<std::vector<cv::Point>> contours;
             std::vector<cv::Vec4i> hierarchy;
-            cv::threshold(src,src,254,255,0); //Remove shaddows
+            cv::threshold(src,src,254,255,0); //Remove shadows
             cv::findContours(src,contours, hierarchy,cv::RETR_TREE,cv::CHAIN_APPROX_SIMPLE);
             plank_locations.clear();
 
@@ -108,10 +105,10 @@ namespace dolle_iot
             {   
                 cv::Rect rect_ = cv::boundingRect(contour);
                 
-                if(rect_.width<150){continue;}
-                if(rect_.height<50){continue;}
+                if(rect_.width<200){continue;}
+                if(rect_.height<100){continue;}
                 if(rect_.y>340){continue;}
-                if(rect_.x<20){continue;}
+                if(rect_.x<5 || (rect_.x+rect_.width)>(src.cols-5)){continue;}
                 //Check if the object is new:
                 if(rect_.x<latest_x){
                     id_count++;
@@ -138,7 +135,6 @@ namespace dolle_iot
         }
 
         limcheck(){
-            std::cout << "id;c.x;c.y;width;height" << std::endl;
             object_detector_=cv::createBackgroundSubtractorKNN();
             if(enable_preview){
                 cv::namedWindow("Vision alg");
