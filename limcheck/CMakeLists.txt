@@ -101,7 +101,7 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY data/ml_models/
-DESTINATION include/ml_models)
+DESTINATION lib/ml_models)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

@@ -59,7 +59,7 @@ public:
 
 yolo::yolo()
 {
-    net= cv::dnn::readNet("ml_models/limcheck.onnx");
+    net= cv::dnn::readNet("../ml_models/limcheck.onnx");
 }
 yolo::yolo(std::string path_to_onnx, std::vector<std::string> labels)
 {
