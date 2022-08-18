@@ -70,6 +70,10 @@ add_executable(camera src/camera.cpp)
 ament_target_dependencies(camera rclcpp std_msgs image_transport cv_bridge BLAS)
 rosidl_target_interfaces(camera ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
+add_executable(saveData src/saveData.cpp)
+ament_target_dependencies(saveData rclcpp std_msgs image_transport cv_bridge BLAS)
+rosidl_target_interfaces(saveData ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
 # Gui install
 include_directories(src/gui/include)
 link_directories(src/gui/include)
