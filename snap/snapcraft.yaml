@@ -28,6 +28,25 @@ apps:
     extensions: 
       - ros2-foxy
 
+  limcheck-gather-data:
+    command: opt/ros/foxy/bin/ros2 launch gather_data.launch.py 
+    common-id: limcheck-gather-data.desktop
+    plugs:
+      - desktop-launch
+      - home
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - wayland
+      - x11
+      - network
+      - network-bind 
+      - camera
+      - locale-control
+    extensions: 
+      - ros2-foxy
+
 parts:
   desktop-qt5:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git

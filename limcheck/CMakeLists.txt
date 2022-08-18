@@ -101,6 +101,7 @@ target_link_libraries(gui
 #install executables here
 install(TARGETS
   camera
+  saveData
   gui
   DESTINATION lib/${PROJECT_NAME})
 
