@@ -26,8 +26,6 @@ endif()
 include_directories(include)
 link_directories(include)
 
-find_library(WiringPi REQUIRED)
-
 find_package(BLAS REQUIRED)
 find_package(rcpputils REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -46,13 +44,19 @@ find_package(rosidl_default_generators REQUIRED)
 
 set(msg_files
   "msg/CleaningStamp.msg"
+  "msg/ImagePos.msg"
+  "msg/ObjectPos.msg"
 )
 
+set(srv_files
+  "srv/StopSignal.srv"
+)
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${msg_files}
+  ${srv_files}
   DEPENDENCIES std_msgs
 )
-set_property(SOURCE ${msg_files} PROPERTY SKIP_AUTOGEN ON)
+set_property(SOURCE ${msg_files} ${srv_files} PROPERTY SKIP_AUTOGEN ON)
 
 ament_export_dependencies(
   rosidl_default_runtime
@@ -62,11 +66,13 @@ ament_export_dependencies(
   BLAS
 )
 
-add_executable(limchecker src/limcheck.cpp)
-ament_target_dependencies(limchecker rclcpp std_msgs image_transport cv_bridge BLAS)
-
 add_executable(camera src/camera.cpp)
-ament_target_dependencies(camera rclcpp std_msgs sensor_msgs cv_bridge)
+ament_target_dependencies(camera rclcpp std_msgs image_transport cv_bridge BLAS)
+rosidl_target_interfaces(camera ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+add_executable(saveData src/saveData.cpp)
+ament_target_dependencies(saveData rclcpp std_msgs image_transport cv_bridge BLAS)
+rosidl_target_interfaces(saveData ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 # Gui install
 include_directories(src/gui/include)
@@ -94,10 +100,12 @@ target_link_libraries(gui
 
 #install executables here
 install(TARGETS
-  limchecker
   camera
   gui
   DESTINATION lib/${PROJECT_NAME})
+
+install(DIRECTORY data/ml_models/
+DESTINATION lib/ml_models)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

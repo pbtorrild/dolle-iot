@@ -4,15 +4,25 @@ from launch_ros.actions import Node
 def generate_launch_description():
     return LaunchDescription([
         Node(
-            package='v4l2_camera',
-            namespace='stigemaskine2',
-            executable='v4l2_camera_node',
-            name='camera_1'
+            package='limcheck',
+            namespace='sm2',
+            executable='camera',
+            name='limcheck_1',
+            output="screen",
+            emulate_tty=True,
+            parameters=[
+                {"camera"   :   "1"}
+            ]
         ),
         Node(
             package='limcheck',
-            namespace='stigemaskine2',
-            executable='limcheck',
-            name='limcheck_1'
+            namespace='sm2',
+            executable='camera',
+            name='limcheck_0',
+            output="screen",
+            emulate_tty=True,
+            parameters=[
+                {"camera"   :   "0"}
+            ]
         )        
     ])
