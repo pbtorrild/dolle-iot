@@ -64,6 +64,7 @@ ament_export_dependencies(
   sensor_msgs
   Qt${QT_VERSION_MAJOR}
   BLAS
+  qml_ros2_plugin
 )
 
 add_executable(camera src/camera.cpp)
