@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Limcheck Data Collector
+Exec=dolle-iot.limcheck-gather-data
+Icon=${SNAP}/meta/gui/dolle-iot.png
