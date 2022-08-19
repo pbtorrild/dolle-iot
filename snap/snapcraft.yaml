@@ -48,7 +48,7 @@ apps:
       - ros2-foxy
 
 parts:
-  desktop-qt5:
+  desktop-qt:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
     source-subdir: qt
     plugin: make
