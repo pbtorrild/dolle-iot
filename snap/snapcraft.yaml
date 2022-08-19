@@ -48,7 +48,7 @@ apps:
       - ros2-foxy
 
 parts:
-  desktop-qt:
+  desktop-qt5:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
     source-subdir: qt
     plugin: make
@@ -72,8 +72,8 @@ parts:
       - locales-all
       - xdg-user-dirs
       - fcitx-frontend-qt5
-
-  ros2_babel_fish:
+      
+  ros2-babel-fish:
     source: https://github.com/LOEWE-emergenCity/ros2_babel_fish
     plugin: colcon
     build-packages: 
