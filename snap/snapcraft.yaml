@@ -131,8 +131,6 @@ parts:
       - qml-module-qtquick-window2
       - qml-module-qtquick-xmllistmodel
       - qml-module-qtquick2
-    colcon-packages:
-      - qml_ros2_plugin
     stage-packages:  
       - ros-foxy-ros2run
       - ros-foxy-ros2launch
@@ -161,4 +159,3 @@ parts:
       - qml-module-qtquick-window2
       - qml-module-qtquick-xmllistmodel
       - qml-module-qtquick2
-    after: [qml-ros2-plugin] 

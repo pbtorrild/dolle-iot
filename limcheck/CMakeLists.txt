@@ -40,7 +40,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Charts)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts)
 
 find_package(rosidl_default_generators REQUIRED)
-
+find_package(rosidl_typesupport_fastrtps_cpp REQUIRED)
 set(msg_files
   "msg/CleaningStamp.msg"
   "msg/ImagePos.msg"
