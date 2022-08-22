@@ -36,11 +36,12 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
 
+find_package(qml_ros2_plugin REQUIRED)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Charts)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts)
 
 find_package(rosidl_default_generators REQUIRED)
-find_package(rosidl_typesupport_fastrtps_cpp REQUIRED)
+
 set(msg_files
   "msg/CleaningStamp.msg"
   "msg/ImagePos.msg"
@@ -63,6 +64,7 @@ ament_export_dependencies(
   sensor_msgs
   Qt${QT_VERSION_MAJOR}
   BLAS
+  qml_ros2_plugin
 )
 
 add_executable(camera src/camera.cpp)
@@ -83,25 +85,25 @@ set(GUI_SOURCES
         
 )
 
-#add_executable(gui ${GUI_SOURCES})
+add_executable(gui ${GUI_SOURCES})
 
-#target_link_libraries(gui
+target_link_libraries(gui
   
- # PRIVATE
- # Qt${QT_VERSION_MAJOR}::Core 
- # Qt${QT_VERSION_MAJOR}::Quick 
- # Qt${QT_VERSION_MAJOR}::Charts 
- # ${rclcpp_LIBRARIES} 
- # ${std_msgs_LIBRARIES}
- # ${qml_ros2_plugin_LIBRARIES}
+  PRIVATE
+  Qt${QT_VERSION_MAJOR}::Core 
+  Qt${QT_VERSION_MAJOR}::Quick 
+  Qt${QT_VERSION_MAJOR}::Charts 
+  ${rclcpp_LIBRARIES} 
+  ${std_msgs_LIBRARIES}
+  ${qml_ros2_plugin_LIBRARIES}
   
-#)
+)
 
 #install executables here
 install(TARGETS
   camera
   saveData
-  #gui
+  gui
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY data/ml_models/
