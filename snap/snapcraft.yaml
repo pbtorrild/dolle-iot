@@ -73,28 +73,6 @@ parts:
       - xdg-user-dirs
       - fcitx-frontend-qt5
 
-  ros2-babel-fish:
-    source: https://github.com/LOEWE-emergenCity/ros2_babel_fish.git
-    plugin: colcon
-    build-packages: 
-      - make
-      - gcc
-      - g++
-    stage-packages:  
-      - ros-foxy-ros2run
-      - ros-foxy-ros2launch
-
-  qml-ros2-plugin:
-    source: https://github.com/StefanFabian/qml_ros2_plugin.git
-    plugin: colcon
-    build-packages: 
-      - make
-      - gcc
-      - g++
-    stage-packages:  
-      - ros-foxy-ros2run
-      - ros-foxy-ros2launch
-
   limcheck:
     plugin: colcon
     source: https://github.com/pbtorrild/dolle-iot.git
@@ -153,6 +131,8 @@ parts:
       - qml-module-qtquick-window2
       - qml-module-qtquick-xmllistmodel
       - qml-module-qtquick2
+    colcon-packages:
+      - qml_ros2_plugin
     stage-packages:  
       - ros-foxy-ros2run
       - ros-foxy-ros2launch
@@ -181,3 +161,4 @@ parts:
       - qml-module-qtquick-window2
       - qml-module-qtquick-xmllistmodel
       - qml-module-qtquick2
+    after: [qml-ros2-plugin] 
