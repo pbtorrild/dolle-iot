@@ -73,14 +73,18 @@ parts:
       - xdg-user-dirs
       - fcitx-frontend-qt5
 
-  limcheck:
+  ros-ws:
     plugin: colcon
-    source: https://github.com/pbtorrild/dolle-iot.git
-    source-subdir: limcheck
+    source: .
+    override-pull: |
+      snapcraftctl pull
+      git clone https://github.com/LOEWE-emergenCity/ros2_babel_fish.git
+      git clone https://github.com/StefanFabian/qml_ros2_plugin.git
     build-packages: 
       - make
       - gcc
       - g++
+      - git
       - libblas-dev
       - libqt5-ukui-style-dev
       - libqt5charts5-dev
@@ -131,6 +135,12 @@ parts:
       - qml-module-qtquick-window2
       - qml-module-qtquick-xmllistmodel
       - qml-module-qtquick2
+      - ros-foxy-rclcpp
+      - ros-foxy-rcpputils
+      - ros-foxy-rclcpp-action
+      - ros-foxy-action-tutorials-interfaces
+      - ros-foxy-image-transport
+      - ros-foxy-tf2-ros
     stage-packages:  
       - ros-foxy-ros2run
       - ros-foxy-ros2launch
