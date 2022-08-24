@@ -12,6 +12,9 @@ apps:
   limcheck-gui:
     command: bin/desktop-launch $SNAP/opt/ros/snap/lib/limcheck/gui   
     common-id: limcheck-gui.desktop
+    environment:
+      "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack"
+    
     plugs:
       - desktop-launch
       - home
@@ -29,8 +32,10 @@ apps:
       - ros2-foxy
 
   limcheck-gather-data:
-    command: opt/ros/foxy/bin/ros2 launch gather_data.launch.py 
+    command: opt/ros/foxy/bin/ros2 launch $SNAP/opt/ros/snap/share/limcheck/launch/gather_data.launch.py 
     common-id: limcheck-gather-data.desktop
+    environment:
+      "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack"
     plugs:
       - desktop-launch
       - home
@@ -144,6 +149,10 @@ parts:
     stage-packages:  
       - ros-foxy-ros2run
       - ros-foxy-ros2launch
+      - ros-foxy-rclcpp-action
+      - ros-foxy-action-tutorials-interfaces
+      - ros-foxy-image-transport
+      - ros-foxy-tf2-ros
       - libdouble-conversion3
       - libpcre2-16-0
       - libqt5core5a
@@ -169,3 +178,4 @@ parts:
       - qml-module-qtquick-window2
       - qml-module-qtquick-xmllistmodel
       - qml-module-qtquick2
+      - libblas-dev

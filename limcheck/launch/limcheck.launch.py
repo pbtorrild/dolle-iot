@@ -11,7 +11,7 @@ def generate_launch_description():
             output="screen",
             emulate_tty=True,
             parameters=[
-                {"camera"   :   "1"}
+                {"camera"   :   "2"}
             ]
         ),
         Node(
