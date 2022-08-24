@@ -83,8 +83,12 @@ parts:
     source: .
     override-pull: |
       snapcraftctl pull
+      if [ ! -d "ros2_babel_fish" ] 
+      then
+      echo "Directories from github DOES NOT exists." 
       git clone https://github.com/LOEWE-emergenCity/ros2_babel_fish.git
       git clone https://github.com/StefanFabian/qml_ros2_plugin.git
+      fi
     build-packages: 
       - make
       - gcc
