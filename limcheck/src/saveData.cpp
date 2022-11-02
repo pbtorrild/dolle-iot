@@ -56,12 +56,9 @@ class ImagePublisher : public rclcpp::Node
                   //Is the plank centre within 10% of the image centre, then save that and select next plank to save
                   if(plank_centre.x > 0.9*camera_1.centre.x && plank_centre.x < 1.1*camera_1.centre.x){
                     //Save img
-                    cv::Mat save_image = frame(plank.pos);
-                    if(!save_image.empty()){
-                      cv::imwrite("~/data/"+std::to_string(plank.id)+"_cam_1.jpg",save_image);
-                      //Select next plank to save
-                      last_plank_id = plank.id + 1 + (rand() % 50);
-                    }
+                    cv::imwrite("~/data/"+std::to_string(plank.id)+"_cam_1.jpg",frame.clone());
+                    //Select next plank to save
+                    last_plank_id = plank.id + 1 + (rand() % 50);
                                         
                   }
                 }                

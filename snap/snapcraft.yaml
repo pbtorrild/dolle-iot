@@ -72,6 +72,7 @@ parts:
       - shared-mime-info
       - libqt5gui5
       - libgdk-pixbuf2.0-0
+      - libgtk2.0-0
       - libqt5svg5 # for loading icon themes which are svg
       - try: [appmenu-qt5] # not available on core18
       - locales-all
@@ -86,7 +87,7 @@ parts:
       if [ ! -d "ros2_babel_fish" ] 
       then
       echo "Directories from github DOES NOT exists." 
-      git clone https://github.com/LOEWE-emergenCity/ros2_babel_fish.git
+      git clone --branch foxy https://github.com/LOEWE-emergenCity/ros2_babel_fish.git
       git clone https://github.com/StefanFabian/qml_ros2_plugin.git
       fi
     build-packages: 
