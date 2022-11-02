@@ -10,6 +10,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <limcheck.h>
+#include <camera.h>
 class ImagePublisher : public rclcpp::Node
 {
   private:
@@ -27,35 +28,19 @@ class ImagePublisher : public rclcpp::Node
       RMW_QOS_LIVELINESS_LEASE_DURATION_DEFAULT,
       false
     };
-    //Open Camera
-    int cam_num;
-    cv::VideoCapture cap;
+    
+    //Cameras:
+    dolle_iot::Camera camera_1;
     int32_t last_plank_id=-1;
     dolle_iot::vision::centre img_centre;
   public:
-    bool load_camera(int cam_num_ = 0){
-        
-        cap.set(cv::CAP_PROP_FRAME_WIDTH,640);
-        cap.set(cv::CAP_PROP_FRAME_HEIGHT,420);
-        cap.open(cam_num_,cv::CAP_V4L);
-        //cap.set(cv::CAP_PROP_FPS,60);
-
-        if(cap.isOpened()){
-            return true;
-        }
-        return false;
-    }
 
     void start_publishers(){
             while (true)
             {
-                cv::Mat frame;
-                cap >> frame;
+                cv::Mat frame = camera_1.read();
                 if(frame.empty()){
                   break;
-                }
-                if(img_centre.x <0 || img_centre.y <0){
-                  img_centre = dolle_iot::vision::get_centre(frame);
                 }
                 //Std: segmentation of image, using background-subtraction.
 
@@ -69,11 +54,11 @@ class ImagePublisher : public rclcpp::Node
 
                   dolle_iot::vision::centre plank_centre=dolle_iot::vision::get_centre(plank.pos);
                   //Is the plank centre within 10% of the image centre, then save that and select next plank to save
-                  if(plank_centre.x > 0.9*img_centre.x && plank_centre.x < 1.1*plank_centre.x){
+                  if(plank_centre.x > 0.9*camera_1.centre.x && plank_centre.x < 1.1*camera_1.centre.x){
                     //Save img
                     cv::Mat save_image = frame(plank.pos);
                     if(!save_image.empty()){
-                      cv::imwrite("~/data/"+std::to_string(plank.id)+"_cam_"+std::to_string(cam_num)+".jpg",save_image);
+                      cv::imwrite("~/data/"+std::to_string(plank.id)+"_cam_1.jpg",save_image);
                       //Select next plank to save
                       last_plank_id = plank.id + 1 + (rand() % 50);
                     }
@@ -88,16 +73,10 @@ class ImagePublisher : public rclcpp::Node
         
     ImagePublisher() : Node("data_check")
     {   
-        this->declare_parameter<int>("camera",0);
-        this->get_parameter("camera",cam_num);
-        image_pub = image_transport::create_publisher(this, "limcheck/cam" + std::to_string(cam_num) , custom_qos);
-        
-        if(load_camera(cam_num)){
+        image_pub = image_transport::create_publisher(this, "limcheck/cam1" , custom_qos);
+        if(camera_1.load("/dev/video0")){
             start_publishers();
         }
-    }
-    ~ImagePublisher(){
-      cap.release();
     }
 };
 
