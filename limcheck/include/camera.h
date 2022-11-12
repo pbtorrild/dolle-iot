@@ -5,6 +5,10 @@
 #include <dolle_vision.h>
 #include <opencv2/opencv.hpp>
 
+
+#include "rclcpp/logger.hpp"
+#include "rcutils/logging_macros.h"
+
 namespace dolle_iot
 {
     class Camera
@@ -14,7 +18,6 @@ namespace dolle_iot
         cv::VideoCapture cap;
     protected:
         int width, height, fps;
-
     public:
         // Stores centre coordinates of the image frame
         vision::centre centre;
@@ -58,7 +61,14 @@ namespace dolle_iot
     cv::Mat Camera::read()
     {
         cv::Mat frame;
-        cap >> frame;
+        try
+        {
+            cap >> frame;
+        }
+        catch(const cv::Exception& e)
+        {
+            RCUTILS_LOG_WARN("Error at camera read: %s",e.what());
+        }
         return frame;
     }
     

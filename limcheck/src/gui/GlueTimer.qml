@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
-import Ros2 1.0
 import "include/timer.js" as Countdown
 import "include/DolleBranding.js" as Dolle
 
@@ -9,8 +8,6 @@ ColumnLayout{
     id:glue_timer
     anchors.fill: timer_area
 
-    property var ros_time: Ros2.now()
-    
     FontLoader{
         id: dolle_font
         source: "fonts/regular"
@@ -57,12 +54,8 @@ ColumnLayout{
         }
         hoverEnabled: false
         onPressed: {
-            background.color=Dolle.colors.dark_red,
-            glue_timer.ros_time=Ros2.now(),
-            main.timePublisher.publish({ 
-                displayed_time: time.text
-                })
-            }
+            background.color=Dolle.colors.dark_red
+        }
         onReleased: {
             Countdown.resetTimer(),
             background.color=Dolle.colors.red

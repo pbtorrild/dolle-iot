@@ -31,8 +31,10 @@ class ImagePublisher : public rclcpp::Node
     
     //Cameras:
     dolle_iot::Camera camera_1;
+    int consecutive_read_errors=0;
+
     int32_t last_plank_id=-1;
-    dolle_iot::vision::centre img_centre;
+
   public:
 
     void start_publishers(){
@@ -40,28 +42,36 @@ class ImagePublisher : public rclcpp::Node
             {
                 cv::Mat frame = camera_1.read();
                 if(frame.empty()){
+                  consecutive_read_errors++;
+                  if(consecutive_read_errors<=10){
+                    continue;
+                  }
                   break;
                 }
+                consecutive_read_errors=0;
+                /*
                 //Std: segmentation of image, using background-subtraction.
-
-                limcheck_.find_planks(frame);
+                limcheck_.find_planks(frame);                
                 std::vector<dolle_iot::vision::object> planks = limcheck_.plank_locations;
-                std::vector<dolle_iot::vision::object> known_locations;
-                
-                for(dolle_iot::vision::object plank : planks){
+                if (!planks.empty())
+                {
+                  for(dolle_iot::vision::object plank : planks){
 
-                  if(plank.id <= last_plank_id){continue;}
+                    if(plank.id <= last_plank_id){continue;}
 
-                  dolle_iot::vision::centre plank_centre=dolle_iot::vision::get_centre(plank.pos);
-                  //Is the plank centre within 10% of the image centre, then save that and select next plank to save
-                  if(plank_centre.x > 0.9*camera_1.centre.x && plank_centre.x < 1.1*camera_1.centre.x){
-                    //Save img
-                    cv::imwrite("~/data/"+std::to_string(plank.id)+"_cam_1.jpg",frame.clone());
-                    //Select next plank to save
-                    last_plank_id = plank.id + 1 + (rand() % 50);
-                                        
-                  }
-                }                
+                    dolle_iot::vision::centre plank_centre=dolle_iot::vision::get_centre(plank.pos);
+                    //Is the plank centre within 10% of the image centre, then save that and select next plank to save
+                    if(plank_centre.x > 0.9*camera_1.centre.x && plank_centre.x < 1.1*camera_1.centre.x){
+                      //Save img
+                      cv::imwrite("~/data/"+std::to_string(plank.id)+"_cam_1.jpg",frame.clone());
+                      //Select next plank to save
+                      last_plank_id = plank.id + 1 + (rand() % 50);
+                                          
+                    }
+                  }     
+                }
+                */
+                           
                 cv::Mat vision = limcheck_.illustrate_vision(frame.clone());
                 image_pub.publish(cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", vision).toImageMsg());
             }
@@ -70,9 +80,16 @@ class ImagePublisher : public rclcpp::Node
         
     ImagePublisher() : Node("data_check")
     {   
-        image_pub = image_transport::create_publisher(this, "limcheck/cam1" , custom_qos);
-        if(camera_1.load("/dev/video0")){
+        this->declare_parameter("device_path", "/dev/video0");
+        this->declare_parameter("image_topic", "limcheck/cam1");
+        const char * device_path = this->get_parameter("device_path").get_parameter_value().get<std::string>().c_str();
+        const char * image_topic = this->get_parameter("image_topic").get_parameter_value().get<std::string>().c_str();
+
+        image_pub = image_transport::create_publisher(this, image_topic , custom_qos);
+
+        if(camera_1.load(device_path)){
             start_publishers();
+            RCLCPP_INFO(this->get_logger(), "Opened camera @ %s!", device_path);
         }
     }
 };

@@ -11,18 +11,20 @@ def generate_launch_description():
             output="screen",
             emulate_tty=True,
             parameters=[
-                {"camera"   :   1}
+                {"device_path": "/dev/video0"},
+                {"image_topic": "limcheck/cam1"}
             ]
         ),
         Node(
             package='limcheck',
             namespace='sm2',
             executable='saveData',
-            name='limcheck_0',
+            name='limcheck_2',
             output="screen",
             emulate_tty=True,
             parameters=[
-                {"camera"   :   0}
+                {"device_path": "/dev/video2"},
+                {"image_topic": "limcheck/cam2"}
             ]
-        )        
+        )
     ])

@@ -52,6 +52,26 @@ apps:
     extensions: 
       - ros2-foxy
 
+  limcheck-gpio-test:
+    command: opt/ros/foxy/bin/ros2 launch $SNAP/opt/ros/snap/share/limcheck/launch/gpio_test.py 
+    environment:
+      "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack"
+    plugs:
+      - desktop-launch
+      - home
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - wayland
+      - x11
+      - network
+      - network-bind 
+      - camera
+      - locale-control
+    extensions: 
+      - ros2-foxy
+
 parts:
   desktop-qt5:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
